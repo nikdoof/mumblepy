@@ -12,7 +12,7 @@ class Channel(object):
 
     @property
     def parent(self):
-        if self.__channel.parent != 0:
+        if self.__channel.parent != -1:
             return self.__server.get_channel(self.__channel.parent)
 
     @property
