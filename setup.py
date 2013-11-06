@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # coding=utf-8
 
 from setuptools import setup, find_packages
@@ -7,7 +8,7 @@ DESCRIPTION = 'Python Mumble for Humans™'
 with open('README.md') as f:
     LONG_DESCRIPTION = f.read()
 
-VERSION = '0.1.0'
+from mumble import __version__ as VERSION
 
 setup(
     name='mumble',
