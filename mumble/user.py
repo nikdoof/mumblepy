@@ -121,6 +121,8 @@ class User(object):
         return self.update(prioritySpeaker=0)
 
     def move(self, channel):
+        if isinstance(channel, int):
+            return self.update(channel=channel)
         return self.update(channel=channel.id)
 
     def kick(self, reason=''):
