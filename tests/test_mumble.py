@@ -66,3 +66,9 @@ class ChannelTests(unittest.TestCase):
 
     def testSerailze(self):
         self.assertNotEqual(self.root_channel.serialize(), None)
+
+    def testACL(self):
+        self.assertEquals(len(self.root_channel.get_acls()), 3)
+
+    def testGroup(self):
+        self.assertEquals(len(self.root_channel.get_groups()), 1)
