@@ -1,3 +1,47 @@
+class ACL(object):
+    """
+    ACL entry for a Channel.
+    """
+    def __init__(self, channel, acl):
+        self.__channel = channel
+        self.__acl = acl
+
+    @property
+    def apply_here(self):
+        """Indiciates if the ACL applies to the current channel"""
+        return bool(self.__acl.applyHere)
+
+    @property
+    def apply_subs(self):
+        """Indicates if the ACL applies to sub channels"""
+        return bool(self.__acl.applySubs)
+
+    @property
+    def inherited(self):
+        """Indiciates if the ACL is inherited from a parent channel"""
+        return bool(self.__acl.inherited)
+
+    @property
+    def user(self):
+        """Returns the User ID this ACL applies to"""
+        return self.__acl.userid
+
+    @property
+    def group(self):
+        """Returns the group this ACL applies to"""
+        return self.__acl.group
+
+    @property
+    def allow(self):
+        """Returns a bitmask of permissions allowed by this ACL"""
+        return self.__acl.allow
+
+    @property
+    def deny(self):
+        """Returns a bitmask of permissions denied by this ACL"""
+        return self.__acl.deny
+
+
 class Channel(object):
     """
     A class to represent a Mumble channel
@@ -35,31 +79,30 @@ class Channel(object):
     def position(self):
         return self.__channel.position
 
+    def get_acls(self):
+        """Returns the list of ACLs for this channel."""
+        acls = []
+        for acl in self.__server.get_acls(self.__channel.id):
+            acls.append(ACL(self, acl))
+        return acls
+
     def delete(self):
-        """
-        Remove the channel from Mumble
-        """
+        """Remove the channel from Mumble."""
         self.__server.remove_channel(self.__channel.id)
         return True
 
     def update(self, **kwargs):
-        """
-        Update a channel property on the Mumble server
-        """
+        """Update a channel property on the Mumble server."""
         for key, value in kwargs.items():
             setattr(self.__channel, key, value)
         self.__server.set_channel_state(self.__channel)
 
     def send_message(self, text, tree=False):
-        """
-        Send a message to the channel
-        """
+        """Send a message to the channel."""
         return self.__server.send_channel_message(self.__channel.id, text, tree)
 
     def link(self, channel):
-        """
-        Link this channel to another channel
-        """
+        """Link this channel to another channel."""
         current_links = self.__channel.links
         current_links.append(channel.id)
         self.update(links=current_links)

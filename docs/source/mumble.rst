@@ -19,6 +19,10 @@ Server
 Channel
 =======
 
+.. autoclass:: mumble.channel.ACL
+   :members:
+   :undoc-members:
+
 .. autoclass:: mumble.channel.Channel
    :members:
    :undoc-members:

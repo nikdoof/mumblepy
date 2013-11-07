@@ -42,6 +42,18 @@ class Server(object):
     def set_conf(self, key, value):
         return self.__server.setConf(key, value)
 
+    # ACLs
+
+    def get_acls(self, channel_id):
+        acls, groups, inherit = self.__server.getACL(channel_id)
+        return acls
+
+    # Groups
+
+    def get_groups(self, channel_id):
+        acls, groups, inherit = self.__server.getACL(channel_id)
+        return groups
+
     # Channels
 
     def get_channels(self):
