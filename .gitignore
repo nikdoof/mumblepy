@@ -37,3 +37,6 @@ nosetests.xml
 .idea
 .vagrant
 !.vagrant/provision.sh
+
+# Sphinx
+docs/build/
