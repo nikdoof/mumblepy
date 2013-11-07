@@ -24,7 +24,8 @@ class ACL(object):
     @property
     def user(self):
         """Returns the User ID this ACL applies to"""
-        return self.__acl.userid
+        if self.__acl.userid != -1:
+            return self.__acl.userid
 
     @property
     def group(self):
