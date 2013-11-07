@@ -23,19 +23,19 @@ class Logger(Ice.Logger):
 
 
 class Meta(object):
-    def __init__(self, secret=None):
+    def __init__(self, secret=None, ip='127.0.0.1', port=6502):
         self.secret = secret
 
         self.__meta = None
         self.__ice = None
         self.__adapter = None
 
-        self.connect()
+        self.connect(ip, port)
 
     def __del__(self):
         self.disconnect()
 
-    def load_slice(self, proxy):
+    def _load_slice(self, proxy):
         mumble_slice = IcePy.Operation(
             'getSlice',
             Ice.OperationMode.Idempotent,
@@ -57,7 +57,7 @@ class Meta(object):
 
         os.remove(temp)
 
-    def connect(self):
+    def connect(self, ip='127.0.0.1', port=6502):
         init_data = Ice.InitializationData()
         init_data.properties = Ice.createProperties(sys.argv)
         init_data.properties.setProperty('Ice.ImplicitContext', 'Shared')
@@ -71,9 +71,9 @@ class Meta(object):
         self.__adapter = self.__ice.createObjectAdapterWithEndpoints('Callback.Client', 'tcp -h 127.0.0.1')
         self.__adapter.activate()
 
-        proxy = self.__ice.stringToProxy('Meta:tcp -h 127.0.0.1 -p 6502')
+        proxy = self.__ice.stringToProxy('Meta:tcp -h %s -p %d' % (ip, port))
 
-        self.load_slice(proxy)
+        self._load_slice(proxy)
 
         import Murmur
         self.__meta = Murmur.MetaPrx.checkedCast(proxy)
