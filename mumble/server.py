@@ -57,11 +57,16 @@ class Server(object):
     def set_channel_state(self, channel):
         self.__server.setChannelState(channel)
 
-    def add_channel(self, name, parent):
-        return self.__server.addChannel(name, parent)
+    def add_channel(self, name, parent=0):
+        channel_id = self.__server.addChannel(name, parent)
+        return self.get_channel(channel_id)
 
     def remove_channel(self, channel_id):
         self.__server.removeChannel(channel_id)
+
+    def send_channel_message(self, channel_id, text, tree=False):
+        self.__server.sendMessageChannel(channel_id, tree, text)
+        return True
 
     # Users
 

@@ -36,15 +36,33 @@ class Channel(object):
         return self.__channel.position
 
     def delete(self):
+        """
+        Remove the channel from Mumble
+        """
         self.__server.remove_channel(self.__channel.id)
+        return True
 
     def update(self, **kwargs):
+        """
+        Update a channel property on the Mumble server
+        """
         for key, value in kwargs.items():
             setattr(self.__channel, key, value)
         self.__server.set_channel_state(self.__channel)
 
     def send_message(self, text, tree=False):
-        self.__server.send_message(self.__channel.id, tree, text)
+        """
+        Send a message to the channel
+        """
+        return self.__server.send_channel_message(self.__channel.id, text, tree)
+
+    def link(self, channel):
+        """
+        Link this channel to another channel
+        """
+        current_links = self.__channel.links
+        current_links.append(channel.id)
+        self.update(links=current_links)
 
     def serialize(self):
         return {
