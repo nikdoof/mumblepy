@@ -54,6 +54,11 @@ class Server(object):
 
         return Channel(self, channel)
 
+    def get_channel_by_name(self, channel_name):
+        for channel in self.get_channels():
+            if channel.name == channel_name:
+                return channel
+
     def set_channel_state(self, channel):
         self.__server.setChannelState(channel)
 

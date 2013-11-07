@@ -3,6 +3,17 @@ import mumble
 import Ice
 
 
+class ServerTests(unittest.TestCase):
+
+    def setUp(self):
+        self.meta = mumble.Meta('test')
+        self.server = self.meta.get_server(1)
+
+    def testChannelByName(self):
+        self.assertEqual(self.server.get_channel_by_name('Root').id, 0)
+        self.assertEqual(self.server.get_channel_by_name('invalidChannelName'), None)
+
+
 class ChannelTests(unittest.TestCase):
 
     def setUp(self):
@@ -14,7 +25,10 @@ class ChannelTests(unittest.TestCase):
     def tearDown(self):
         for chan in self.server.get_channels():
             if chan.id != 0:
-                chan.delete()
+                try:
+                    chan.delete()
+                except:
+                    pass
 
     def testChannelCreateDelete(self):
         chan = self.server.add_channel('deleteTest')
@@ -43,3 +57,12 @@ class ChannelTests(unittest.TestCase):
         chan = self.server.add_channel('Link 2')
         chan.link(self.link_channel)
         self.assertEqual(chan.links[0].id, self.link_channel.id)
+
+    def testChannelParent(self):
+        chan = self.server.add_channel('Parent Test')
+        self.assertEqual(chan.parent.id, 0)
+        chan2 = self.server.add_channel('Parent 2', parent=chan.id)
+        self.assertEqual(chan2.parent.id, chan.id)
+
+    def testSerailze(self):
+        self.assertNotEqual(self.root_channel.serialize(), None)
