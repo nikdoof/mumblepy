@@ -42,6 +42,32 @@ class ACL(object):
         return self.__acl.deny
 
 
+class Group(object):
+    def __init__(self, channel, group):
+        self.__channel = channel
+        self.__group = group
+
+    @property
+    def name(self):
+        """Name of the group"""
+        return self.__group.name
+
+    @property
+    def inherited(self):
+        """Indiciates if the group is herited from a parent channel."""
+        return bool(self.__group.inherited)
+
+    @property
+    def inheritable(self):
+        """Indiciates if the group is inherited by sub channels."""
+        return bool(self.__group.inheritable)
+
+    @property
+    def members(self):
+        """List of User IDs that are members of the group"""
+        return self.__group.members
+
+
 class Channel(object):
     """
     A class to represent a Mumble channel
@@ -85,6 +111,13 @@ class Channel(object):
         for acl in self.__server.get_acls(self.__channel.id):
             acls.append(ACL(self, acl))
         return acls
+
+    def get_groups(self):
+        """Returns a list of groups for this channel."""
+        groups = []
+        for group in self.__server.get_groups(self.__channel.id):
+            groups.append(Group(self, group))
+        return groups
 
     def delete(self):
         """Remove the channel from Mumble."""

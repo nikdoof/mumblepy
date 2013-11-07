@@ -23,6 +23,10 @@ Channel
    :members:
    :undoc-members:
 
+.. autoclass:: mumble.channel.Group
+   :members:
+   :undoc-members:
+
 .. autoclass:: mumble.channel.Channel
    :members:
    :undoc-members:

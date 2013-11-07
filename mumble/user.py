@@ -1,6 +1,3 @@
-import time
-
-
 class User(object):
     def __init__(self, server, user):
         self.__server = server
