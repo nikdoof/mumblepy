@@ -1,3 +1,4 @@
+import time
 from .user import User
 from .channel import Channel
 
@@ -87,7 +88,13 @@ class Server(object):
         return User(self, user)
 
     def kick_user(self, session, reason=''):
-        self.__server.kickUser(session, reason)
+        return self.__server.kickUser(session, reason)
+
+    def send_user_message(self, session_id, text):
+        return self.__server.sendMessage(session_id, text)
+
+    def set_user_state(self, state):
+        return self.__server.setState(state)
 
     # Bans
 
@@ -96,6 +103,18 @@ class Server(object):
 
     def set_bans(self, bans):
         self.__server.setBans(bans)
+
+    def add_ban(self, address, reason='', bits=128, duration=360):
+        from Murmur import Ban
+        bans = self.get_bans()
+        bans.append(Ban(
+            reason=reason,
+            bits=bits,
+            duration=duration,
+            start=int(time.time()),
+            address=address,
+        ))
+        self.set_bans(bans)
 
     # Hooks
 
