@@ -23,8 +23,11 @@ You'll need to select a server instance using the Meta interface. You can either
     servers = meta.get_all_servers()
     server = meta.get_server(1)
 
-Full Example
-============
+Examples
+========
+
+List Online Users
+-----------------
 
 .. code-block:: python
 
@@ -37,3 +40,22 @@ Full Example
     print "====="
     for user in server.get_users():
         print "* %s" % user.name
+
+
+Kick Idle Users
+---------------
+
+.. code-block:: python
+
+    from mumble import Meta
+    
+    TIMEOUT = 3600
+    ICE_WRITE_SECRET = 'secret'
+    SERVER_ID = 1
+    
+    meta = Meta(ICE_WRITE_SECRET)
+    server = meta.get_server(SERVER_ID)
+    for user in server.get_users():
+        if user.idle_seconds >= TIMEOUT:
+            user.kick()
+    
