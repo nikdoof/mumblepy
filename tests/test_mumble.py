@@ -1,6 +1,6 @@
+# coding=utf-8
 import unittest
 import mumble
-import Ice
 
 
 class ServerTests(unittest.TestCase):
@@ -9,9 +9,45 @@ class ServerTests(unittest.TestCase):
         self.meta = mumble.Meta('test')
         self.server = self.meta.get_server(1)
 
+    def tearDown(self):
+        for chan in self.server.get_channels():
+            if chan.id != 0:
+                try:
+                    chan.delete()
+                except:
+                    pass
+
+    def testGetAllConf(self):
+        self.assertNotEqual(self.server.get_all_conf(), None)
+
     def testChannelByName(self):
+        unicode_channel = self.server.add_channel(u'Têｓｔ Cɦａԉｎｅɭ 1')
         self.assertEqual(self.server.get_channel_by_name('Root').id, 0)
+        self.assertEqual(self.server.get_channel_by_name(u'Têｓｔ Cɦａԉｎｅɭ 1').id, unicode_channel.id)
         self.assertEqual(self.server.get_channel_by_name('invalidChannelName'), None)
+
+    def testInvalidChannelByName(self):
+        self.assertEqual(self.server.get_channel_by_name(None), None)
+
+    def testInvalidGetChannel(self):
+        self.assertEqual(self.server.get_channel(-1), None)
+        self.assertEqual(self.server.get_channel(232302323), None)
+        self.assertEqual(self.server.get_channel(None), None)
+
+    def testGetChannels(self):
+        self.assertEqual(len(self.server.get_channels()), 1)
+
+    def testAddChannel(self):
+        self.assertNotEqual(self.server.add_channel('Test Channel 1'), None)
+        self.assertNotEqual(self.server.add_channel(u'Têｓｔ Cɦａԉｎｅɭ 2'), None)
+
+    def testInvalidAddChannel(self):
+        self.assertEqual(self.server.add_channel(None), None)
+
+    def testRemoveChannel(self):
+        chan_id = self.server.add_channel('Removal').id
+        self.server.remove_channel(chan_id)
+        self.assertEqual(self.server.get_channel(chan_id), None)
 
 
 class ChannelTests(unittest.TestCase):
