@@ -55,7 +55,7 @@ class Group(object):
 
     @property
     def inherited(self):
-        """Indiciates if the group is herited from a parent channel."""
+        """Indiciates if the group is inherited from a parent channel."""
         return bool(self.__group.inherited)
 
     @property

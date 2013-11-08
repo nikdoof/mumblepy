@@ -2,6 +2,8 @@ class User(object):
     def __init__(self, server, user):
         self.__server = server
         self.__user = user
+        if self.__user.userid:
+            self.__registration = self.__server.get_registration(self.__user.userid)
 
     @property
     def session(self):
@@ -112,6 +114,17 @@ class User(object):
     def idle_seconds(self):
         """Returns the number of seconds the user has been idle."""
         return self.__user.idlesecs
+
+    @property
+    def registered(self):
+        """Indiciates if the user is registered"""
+        return self.__user.userid > 0
+
+    @property
+    def email(self):
+        """If the user is registered, return the user's email address"""
+        if self.__user.userid:
+            return self.__registration.UserEmail
 
     def update(self, **kwargs):
         """Update a value of the user's state.kwargs

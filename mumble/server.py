@@ -108,6 +108,12 @@ class Server(object):
     def set_user_state(self, state):
         return self.__server.setState(state)
 
+    def get_registrations(self, filter=''):
+        return self.__server.getRegistedUsers(filter)
+
+    def get_registration(self, user_id):
+        return self.__server.getRegistration(user_id)
+
     # Bans
 
     def get_bans(self):
